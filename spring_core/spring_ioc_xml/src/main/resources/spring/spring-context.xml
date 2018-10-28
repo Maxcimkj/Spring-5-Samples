@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:property-placeholder location="classpath:configurations.properties"/>
+
+    <!--scope prototype-->
+    <bean id="capsuleModule" class="com.maksim.spring.samples.ioc.xml.model.CapsuleModule" scope="prototype"/>
+    <bean id="waterSupplier" class="com.maksim.spring.samples.ioc.xml.model.WaterSupplier" scope="prototype"/>
+    <bean id="milkSupplier" class="com.maksim.spring.samples.ioc.xml.model.MilkSupplier" scope="prototype"/>
+    <bean id="coffeeBrewer" class="com.maksim.spring.samples.ioc.xml.model.CoffeeBrewer" scope="prototype"/>
+    <bean id="heater" class="com.maksim.spring.samples.ioc.xml.model.Heater" scope="prototype"/>
+    <!--coffee configurations-->
+    <bean id="coffee1" class="com.maksim.spring.samples.ioc.xml.model.CoffeeTypeConfiguration">
+        <property name="temperature" value="${coffee.type.1.temperature}"/>
+        <property name="pressure" value="${coffee.type.1.pressure}"/>
+        <property name="countMilk" value="${coffee.type.1.countMilk}"/>
+        <property name="countWater" value="${coffee.type.1.countWater}"/>
+    </bean>
+    <bean id="coffee2" class="com.maksim.spring.samples.ioc.xml.model.CoffeeTypeConfiguration">
+        <property name="temperature" value="${coffee.type.2.temperature}"/>
+        <property name="pressure" value="${coffee.type.2.pressure}"/>
+        <property name="countMilk" value="${coffee.type.2.countMilk}"/>
+        <property name="countWater" value="${coffee.type.2.countWater}"/>
+    </bean>
+    <bean id="coffee3" class="com.maksim.spring.samples.ioc.xml.model.CoffeeTypeConfiguration">
+        <property name="temperature" value="${coffee.type.3.temperature}"/>
+        <property name="pressure" value="${coffee.type.3.pressure}"/>
+        <property name="countMilk" value="${coffee.type.3.countMilk}"/>
+        <property name="countWater" value="${coffee.type.3.countWater}"/>
+    </bean>
+    <util:set id="coffeeConfiguration" scope="prototype">
+        <ref bean="coffee1"/>
+        <ref bean="coffee2"/>
+        <ref bean="coffee3"/>
+    </util:set>
+    <!--Coffee machine bean, scope singleton-->
+    <bean id="coffeeMachine" class="com.maksim.spring.samples.ioc.xml.model.CoffeeMachine">
+        <constructor-arg ref="capsuleModule"/>
+        <constructor-arg ref="heater"/>
+        <constructor-arg ref="milkSupplier"/>
+        <constructor-arg ref="waterSupplier"/>
+        <constructor-arg ref="coffeeConfiguration"/>
+        <constructor-arg ref="coffeeBrewer"/>
+    </bean>
+</beans>
