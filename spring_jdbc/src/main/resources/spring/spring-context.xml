@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:db-configurations.properties"/>
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${jdbc.driver.classname}" p:url="${jdbc.url}"
+          p:username="${jdbc.username}" p:password="${jdbc.password}"/>
+
+    <bean id="customExceptionTranslator" class="com.maksim.spring.samples.exception.CustomJdbcExceptionTranslator">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="jdbcTemplateDao" class="com.maksim.spring.samples.dao.JdbcTemplateOnlyDao">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+        <constructor-arg name="exceptionTranslator" ref="customExceptionTranslator"/>
+    </bean>
+
+    <bean id="CRUDJdbcTemplateDao" class="com.maksim.spring.samples.dao.CRUDJdbcTemplateDao">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+</beans>
